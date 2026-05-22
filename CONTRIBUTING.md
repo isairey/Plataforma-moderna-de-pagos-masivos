@@ -1,117 +1,430 @@
-# Contributing to Stellar BatchPay
+<div align="center">
 
-This guide covers the local setup, architecture, testing workflow, and pull request expectations for `Stellar-Batch-Pay`.
+<img width="180" src="https://cdn-icons-png.flaticon.com/512/2620/2620277.png" />
 
-## Prerequisites
+# 🤝 Contributing to Stellar BatchPay
 
-- Node.js 20 or newer
-- npm 10 or newer
-- Rust toolchain with `wasm32-unknown-unknown`
+### Guía oficial de contribución para desarrolladores y colaboradores 🚀
+
+<p align="center">
+  <b>Stellar BatchPay</b> es un proyecto open source enfocado en pagos masivos blockchain, smart contracts Soroban y automatización financiera sobre Stellar.
+</p>
+
+<p align="center">
+  <img src="https://img.shields.io/badge/Open_Source-Contributions-7B61FF?style=for-the-badge&logo=github&logoColor=white">
+  <img src="https://img.shields.io/badge/Stellar-Blockchain-000000?style=for-the-badge&logo=stellar&logoColor=white">
+  <img src="https://img.shields.io/badge/Soroban-Smart_Contracts-FF6F00?style=for-the-badge&logo=rust&logoColor=white">
+  <img src="https://img.shields.io/badge/Next.js-Fullstack_App-111111?style=for-the-badge&logo=nextdotjs&logoColor=white">
+</p>
+
+<p align="center">
+  <a href="#-requisitos">Requisitos</a> •
+  <a href="#-instalación-local">Instalación</a> •
+  <a href="#-arquitectura">Arquitectura</a> •
+  <a href="#-testing">Testing</a> •
+  <a href="#-pull-requests">Pull Requests</a>
+</p>
+
+</div>
+
+---
+
+# 🌌 Acerca de las contribuciones
+
+Gracias por interesarte en contribuir a **Stellar BatchPay** ❤️
+
+Este proyecto busca construir una plataforma moderna para:
+
+- 💸 Pagos masivos en Stellar
+- ⏳ Sistemas de vesting
+- 🌐 Integraciones blockchain
+- ⚡ Automatización financiera
+- 🧩 Smart contracts Soroban
+- 🚀 Arquitectura escalable
+
+Las contribuciones pueden incluir:
+
+- 🛠️ Nuevas funcionalidades
+- 🐛 Corrección de errores
+- 📚 Mejoras de documentación
+- ⚡ Optimización de rendimiento
+- 🔒 Mejoras de seguridad
+- 🎨 Mejoras UI/UX
+
+---
+
+# 📋 Requisitos
+
+## ⚙️ Herramientas necesarias
+
+Antes de comenzar asegúrate de tener instalado:
+
+- Node.js 20+
+- npm 10+
+- Rust Toolchain
 - Soroban CLI
+- Git
+- VS Code (recomendado)
 
-## Local Setup
+---
 
-1. Clone your fork and add the upstream remote if needed:
+## 🦀 Configuración Rust
 
-```bash
-git clone https://github.com/<your-user>/Stellar-Batch-Pay.git
-cd Stellar-Batch-Pay
-git remote add upstream https://github.com/jahrulezfrancis/Stellar-Batch-Pay.git
-```
-
-2. Install JavaScript dependencies:
-
-```bash
-npm install
-```
-
-3. Install the Soroban target for contract builds:
+Instalar target WASM:
 
 ```bash
 rustup target add wasm32-unknown-unknown
 ```
 
-4. Install Soroban CLI if it is not already available:
+---
+
+## 🌐 Instalar Soroban CLI
 
 ```bash
 cargo install --locked soroban-cli
 ```
 
-## Development Workflow
+---
 
-Run the web app locally:
+# ⚡ Instalación local
+
+## 1️⃣ Clonar repositorio
+
+```bash
+git clone https://github.com/<your-user>/Stellar-Batch-Pay.git
+```
+
+---
+
+## 2️⃣ Entrar al proyecto
+
+```bash
+cd Stellar-Batch-Pay
+```
+
+---
+
+## 3️⃣ Configurar upstream
+
+```bash
+git remote add upstream https://github.com/jahrulezfrancis/Stellar-Batch-Pay.git
+```
+
+---
+
+## 4️⃣ Instalar dependencias
+
+```bash
+npm install
+```
+
+---
+
+## 5️⃣ Ejecutar entorno local
 
 ```bash
 npm run dev
 ```
 
-The Next.js application will be available at `http://localhost:3000`.
+La aplicación estará disponible en:
 
-## Project Architecture
+```bash
+http://localhost:3000
+```
 
-The repository is organized into three main areas:
+---
 
-- `app/`: Next.js App Router pages and API routes
-- `components/`: reusable client-side UI components
-- `lib/stellar/`: parsing, validation, batching, and transaction-building logic
-- `contracts/batch-vesting/`: Soroban smart contract for time-locked batch vesting
-- `tests/`: Vitest unit tests for the JavaScript and TypeScript payment logic
+# 🏗️ Arquitectura
 
-### Key modules
+## ⚡ Arquitectura general
 
-- `lib/stellar/parser.ts`: converts JSON and CSV files into payment rows
-- `lib/stellar/validator.ts`: validates Stellar addresses, assets, and batch settings
-- `lib/stellar/batcher.ts`: groups valid payment instructions into transaction-safe batches
-- `app/api/batch-build/route.ts`: builds unsigned batch transactions for wallet signing
+```text
+Frontend → API Routes → Stellar SDK → Stellar Network
+                          ↓
+                   Soroban Contracts
+```
 
-## Testing
+---
 
-Run the JavaScript and TypeScript test suite:
+# 📂 Estructura del proyecto
+
+```bash
+Stellar-Batch-Pay/
+│
+├── app/
+├── components/
+├── lib/
+│   └── stellar/
+├── contracts/
+│   └── batch-vesting/
+├── tests/
+├── public/
+├── docs/
+├── README.md
+├── CONTRIBUTING.md
+└── LICENSE
+```
+
+---
+
+# 👨‍💻 Módulos principales
+
+## 🌐 App Module (`app/`)
+
+Contiene las páginas y rutas API de Next.js.
+
+### Funcionalidades:
+
+- 📄 App Router
+- 🌐 API Routes
+- ⚡ Batch Builder API
+- 🔗 Integración frontend/backend
+
+---
+
+## 🎨 Components Module (`components/`)
+
+Componentes reutilizables de UI.
+
+### Funcionalidades:
+
+- 📂 File Upload
+- 📊 Batch Summary
+- 📋 Result Display
+- ⚡ Interfaces dinámicas
+
+---
+
+## ⭐ Stellar Core Module (`lib/stellar/`)
+
+Motor principal de procesamiento blockchain.
+
+### Funcionalidades:
+
+- 📄 Parsing CSV/JSON
+- 🔍 Validación de pagos
+- 📦 Batching automático
+- 🌐 Construcción de transacciones
+- ⚡ Integración Stellar SDK
+
+---
+
+## ⏳ Smart Contract Module (`contracts/batch-vesting/`)
+
+Contratos inteligentes Soroban.
+
+### Funcionalidades:
+
+- 🔒 Batch Vesting
+- ⏰ Unlock timestamps
+- 💰 Custodia de fondos
+- 📋 Claims automáticos
+
+---
+
+# 🧠 Archivos importantes
+
+| Archivo | Descripción |
+|---|---|
+| `parser.ts` | Conversión CSV/JSON |
+| `validator.ts` | Validación de pagos |
+| `batcher.ts` | Agrupación de transacciones |
+| `route.ts` | API de batch builder |
+| `lib.rs` | Smart contract Soroban |
+
+---
+
+# 🧪 Testing
+
+## ⚡ Ejecutar tests JavaScript/TypeScript
 
 ```bash
 npm test
 ```
 
-Run the production build:
+---
+
+## 🏗️ Build de producción
 
 ```bash
 npm run build
 ```
 
-Run the Soroban contract tests from the `contracts/` workspace:
+---
+
+## 🦀 Ejecutar tests Soroban
 
 ```bash
 cargo test --manifest-path contracts/Cargo.toml
 ```
 
-Build the Soroban contract artifacts:
+---
+
+## ⚙️ Compilar contratos WASM
 
 ```bash
 cargo build --manifest-path contracts/Cargo.toml --target wasm32-unknown-unknown
 ```
 
-Before opening a pull request, make sure the relevant local checks complete successfully.
+---
 
-## Pull Request Guidelines
+# 🔐 Buenas prácticas
 
-- Create a focused branch from the latest `main`
-- Keep each pull request scoped to a small set of related changes
-- Add or update tests for behavior changes
-- Update docs when the user-facing flow or developer workflow changes
-- Include the linked issue numbers in the PR description
-- Confirm the web app build and the relevant test suite pass locally before pushing
+## ✅ Antes de abrir un Pull Request
 
-## Commit Guidelines
+Asegúrate de:
 
-- Use clear commit messages describing the behavior change
-- Avoid mixing refactors with unrelated fixes
-- Do not force-push over someone else’s branch without coordination
+- ✔️ Ejecutar tests locales
+- ✔️ Verificar build de producción
+- ✔️ Actualizar documentación
+- ✔️ Mantener commits limpios
+- ✔️ Probar contratos Soroban
+- ✔️ Revisar errores TypeScript
 
-## Reporting Issues
+---
 
-When opening an issue or PR, include:
+# 🚀 Workflow de desarrollo
 
-- expected behavior
-- actual behavior
-- reproduction steps
-- logs, screenshots, or failing test output when available
+## 🌱 Crear nueva rama
+
+```bash
+git checkout -b feature/nueva-funcionalidad
+```
+
+---
+
+## 💾 Realizar commit
+
+```bash
+git commit -m "✨ Nueva funcionalidad"
+```
+
+---
+
+## 📤 Push al fork
+
+```bash
+git push origin feature/nueva-funcionalidad
+```
+
+---
+
+## 🔄 Crear Pull Request
+
+Abrir Pull Request hacia:
+
+```bash
+main
+```
+
+---
+
+# 🤝 Pull Request Guidelines
+
+## 📋 Recomendaciones
+
+- Mantener PRs pequeños y específicos
+- No mezclar refactors con fixes
+- Agregar pruebas para nuevos cambios
+- Actualizar documentación relevante
+- Referenciar issues relacionados
+- Mantener consistencia del proyecto
+
+---
+
+# 🧠 Commit Guidelines
+
+## ✨ Commits recomendados
+
+```bash
+✨ Nueva funcionalidad
+🐛 Corrección de bug
+🛠️ Refactor interno
+📚 Actualización documentación
+⚡ Optimización
+🔒 Seguridad
+```
+
+---
+
+# 🐛 Reportar problemas
+
+## 📋 Información recomendada
+
+Cuando abras un Issue incluye:
+
+- ✅ Comportamiento esperado
+- ❌ Resultado actual
+- 🔄 Pasos para reproducir
+- 📸 Screenshots
+- 📄 Logs
+- ⚡ Error output
+
+---
+
+# 🌐 Tecnologías utilizadas
+
+## ⚙️ Stack principal
+
+<p>
+  <img src="https://skillicons.dev/icons?i=nextjs,react,ts,nodejs,rust,git,github,vscode" />
+</p>
+
+- Next.js
+- React
+- TypeScript
+- Node.js
+- Rust
+- Soroban SDK
+- Stellar SDK
+- Git & GitHub
+
+---
+
+# 🚧 Roadmap de contribución
+
+## 🔮 Áreas abiertas
+
+- 📱 Mobile support
+- 🌐 Wallet integrations
+- 🤖 Smart automation
+- 📊 Analytics dashboard
+- ⚡ Performance improvements
+- 🔒 Security hardening
+- ☁️ Cloud deployment
+- 🌍 Multi-chain support
+
+---
+
+# 👨‍💻 Comunidad
+
+<div align="center">
+
+## Stellar BatchPay Contributors 🚀
+
+Gracias a todos los desarrolladores que ayudan a mejorar el ecosistema blockchain open source ❤️
+
+</div>
+
+---
+
+# 🌟 Cómo apoyar el proyecto
+
+⭐ Dale una estrella  
+🍴 Haz fork  
+📢 Comparte el proyecto  
+🧩 Contribuye con código
+
+---
+
+# 📜 Licencia
+
+Proyecto open source enfocado en blockchain, automatización financiera y smart contracts modernos.
+
+---
+
+<div align="center">
+
+### 🌌 Stellar BatchPay Contributors — construyendo pagos blockchain modernos ⚡
+
+</div>
