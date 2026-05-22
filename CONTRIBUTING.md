@@ -91,7 +91,7 @@ cargo install --locked soroban-cli
 ## 1️⃣ Clonar repositorio
 
 ```bash
-git clone https://github.com/<your-user>/Stellar-Batch-Pay.git
+git clone https://github.com/isairey/Plataforma-moderna-de-pagos-masivos.git
 ```
 
 ---
@@ -99,7 +99,7 @@ git clone https://github.com/<your-user>/Stellar-Batch-Pay.git
 ## 2️⃣ Entrar al proyecto
 
 ```bash
-cd Stellar-Batch-Pay
+cd Plataforma-moderna-de-pagos-masivos
 ```
 
 ---
@@ -107,7 +107,7 @@ cd Stellar-Batch-Pay
 ## 3️⃣ Configurar upstream
 
 ```bash
-git remote add upstream https://github.com/jahrulezfrancis/Stellar-Batch-Pay.git
+git remote add upstream https://github.com/isairey/Plataforma-moderna-de-pagos-masivos.git
 ```
 
 ---
@@ -149,7 +149,7 @@ Frontend → API Routes → Stellar SDK → Stellar Network
 # 📂 Estructura del proyecto
 
 ```bash
-Stellar-Batch-Pay/
+Plataforma-moderna-de-pagos-masivos/
 │
 ├── app/
 ├── components/
@@ -396,17 +396,7 @@ Cuando abras un Issue incluye:
 
 ---
 
-# 👨‍💻 Comunidad
 
-<div align="center">
-
-## Stellar BatchPay Contributors 🚀
-
-Gracias a todos los desarrolladores que ayudan a mejorar el ecosistema blockchain open source ❤️
-
-</div>
-
----
 
 # 🌟 Cómo apoyar el proyecto
 
