@@ -1,0 +1,230 @@
+/**
+ * Test suite for input parsing functions
+ */
+
+import { Keypair } from 'stellar-sdk';
+
+import {
+  parseCSV,
+  parseInput,
+  parseJSON,
+  parsePaymentFile,
+} from '../lib/stellar/parser';
+
+const validAddress = Keypair.random().publicKey();
+const invalidChecksumAddress = `${validAddress.slice(0, -1)}${validAddress.endsWith('A') ? 'B' : 'A'}`;
+
+describe('JSON Parser', () => {
+  test('parses valid JSON array', () => {
+    const json = JSON.stringify([
+      {
+        address: 'GBBD47UZM2HN7D7XZIZVG4KVAUC36THN5BES6RMNNOK5TUNXAUCVMAKER',
+        amount: '100',
+        asset: 'XLM',
+      },
+    ]);
+    const result = parseJSON(json);
+    expect(result).toHaveLength(1);
+    expect(result[0].amount).toBe('100');
+  });
+
+  test('parses JSON object with payments property', () => {
+    const json = JSON.stringify({
+      payments: [
+        {
+          address: 'GBBD47UZM2HN7D7XZIZVG4KVAUC36THN5BES6RMNNOK5TUNXAUCVMAKER',
+          amount: '100',
+          asset: 'XLM',
+        },
+      ],
+    });
+    const result = parseJSON(json);
+    expect(result).toHaveLength(1);
+  });
+
+  test('throws on invalid JSON', () => {
+    expect(() => parseJSON('invalid json')).toThrow();
+  });
+
+  test('throws on JSON without payments', () => {
+    const json = JSON.stringify({ data: [] });
+    expect(() => parseJSON(json)).toThrow();
+  });
+
+  test('preserves amount as string', () => {
+    const json = JSON.stringify([
+      {
+        address: 'GBBD47UZM2HN7D7XZIZVG4KVAUC36THN5BES6RMNNOK5TUNXAUCVMAKER',
+        amount: '123.456789',
+        asset: 'XLM',
+      },
+    ]);
+    const result = parseJSON(json);
+    expect(result[0].amount).toBe('123.456789');
+  });
+});
+
+describe('CSV Parser', () => {
+  test('parses valid CSV', () => {
+    const csv = `address,amount,asset
+GBBD47UZM2HN7D7XZIZVG4KVAUC36THN5BES6RMNNOK5TUNXAUCVMAKER,100,XLM`;
+    const result = parseCSV(csv);
+    expect(result).toHaveLength(1);
+    expect(result[0].amount).toBe('100');
+  });
+
+  test('parses CSV with multiple rows', () => {
+    const csv = `address,amount,asset
+GBBD47UZM2HN7D7XZIZVG4KVAUC36THN5BES6RMNNOK5TUNXAUCVMAKER,100,XLM
+GBJCHUKZMTFSLOMNC7P4TS4VJJBTCYL3AEYZ7R37ZJNHYQM7MDEBC67,50,XLM`;
+    const result = parseCSV(csv);
+    expect(result).toHaveLength(2);
+  });
+
+  test('handles whitespace in CSV', () => {
+    const csv = `address, amount, asset
+GBBD47UZM2HN7D7XZIZVG4KVAUC36THN5BES6RMNNOK5TUNXAUCVMAKER, 100, XLM`;
+    const result = parseCSV(csv);
+    expect(result[0].amount).toBe('100');
+  });
+
+  test('skips empty lines', () => {
+    const csv = `address,amount,asset
+GBBD47UZM2HN7D7XZIZVG4KVAUC36THN5BES6RMNNOK5TUNXAUCVMAKER,100,XLM
+
+GBJCHUKZMTFSLOMNC7P4TS4VJJBTCYL3AEYZ7R37ZJNHYQM7MDEBC67,50,XLM`;
+    const result = parseCSV(csv);
+    expect(result).toHaveLength(2);
+  });
+
+  test('throws without required columns', () => {
+    const csv = `address,amount
+GBBD47UZM2HN7D7XZIZVG4KVAUC36THN5BES6RMNNOK5TUNXAUCVMAKER,100`;
+    expect(() => parseCSV(csv)).toThrow();
+  });
+
+  test('throws on empty data', () => {
+    const csv = 'address,amount,asset\n';
+    expect(() => parseCSV(csv)).toThrow();
+  });
+});
+
+describe('Format Detection', () => {
+  test('parses JSON format', () => {
+    const json = JSON.stringify([
+      {
+        address: 'GBBD47UZM2HN7D7XZIZVG4KVAUC36THN5BES6RMNNOK5TUNXAUCVMAKER',
+        amount: '100',
+        asset: 'XLM',
+      },
+    ]);
+    const result = parseInput(json, 'json');
+    expect(result).toHaveLength(1);
+  });
+
+  test('parses CSV format', () => {
+    const csv = `address,amount,asset
+GBBD47UZM2HN7D7XZIZVG4KVAUC36THN5BES6RMNNOK5TUNXAUCVMAKER,100,XLM`;
+    const result = parseInput(csv, 'csv');
+    expect(result).toHaveLength(1);
+  });
+
+  test('throws on unknown format', () => {
+    expect(() => parseInput('data', 'xml' as any)).toThrow();
+  });
+});
+
+describe('Memo Parsing - JSON', () => {
+  test('parses JSON with memo fields', () => {
+    const json = JSON.stringify([
+      {
+        address: 'GBBD47UZM2HN7D7XZIZVG4KVAUC36THN5BES6RMNNOK5TUNXAUCVMAKER',
+        amount: '100',
+        asset: 'XLM',
+        memo: 'Test payment',
+        memoType: 'text',
+      },
+    ]);
+    const result = parseJSON(json);
+    expect(result[0].memo).toBe('Test payment');
+    expect(result[0].memoType).toBe('text');
+  });
+
+  test('parses JSON with ID memo type', () => {
+    const json = JSON.stringify([
+      {
+        address: 'GBBD47UZM2HN7D7XZIZVG4KVAUC36THN5BES6RMNNOK5TUNXAUCVMAKER',
+        amount: '100',
+        asset: 'XLM',
+        memo: '12345',
+        memoType: 'id',
+      },
+    ]);
+    const result = parseJSON(json);
+    expect(result[0].memo).toBe('12345');
+    expect(result[0].memoType).toBe('id');
+  });
+
+  test('parses JSON without memo fields', () => {
+    const json = JSON.stringify([
+      {
+        address: 'GBBD47UZM2HN7D7XZIZVG4KVAUC36THN5BES6RMNNOK5TUNXAUCVMAKER',
+        amount: '100',
+        asset: 'XLM',
+      },
+    ]);
+    const result = parseJSON(json);
+    expect(result[0].memo).toBeUndefined();
+    expect(result[0].memoType).toBeUndefined();
+  });
+});
+
+describe('Memo Parsing - CSV', () => {
+  test('parses CSV with memo column', () => {
+    const csv = `address,amount,asset,memo,memoType
+GBBD47UZM2HN7D7XZIZVG4KVAUC36THN5BES6RMNNOK5TUNXAUCVMAKER,100,XLM,Test payment,text`;
+    const result = parseCSV(csv);
+    expect(result[0].memo).toBe('Test payment');
+    expect(result[0].memoType).toBe('text');
+  });
+
+  test('parses CSV with ID memo type', () => {
+    const csv = `address,amount,asset,memo,memoType
+GBBD47UZM2HN7D7XZIZVG4KVAUC36THN5BES6RMNNOK5TUNXAUCVMAKER,100,XLM,67890,id`;
+    const result = parseCSV(csv);
+    expect(result[0].memo).toBe('67890');
+    expect(result[0].memoType).toBe('id');
+  });
+
+  test('parses CSV without memo column', () => {
+    const csv = `address,amount,asset
+GBBD47UZM2HN7D7XZIZVG4KVAUC36THN5BES6RMNNOK5TUNXAUCVMAKER,100,XLM`;
+    const result = parseCSV(csv);
+    expect(result[0].memo).toBeUndefined();
+  });
+
+  test('handles empty memo in CSV row', () => {
+    const csv = `address,amount,asset,memo,memoType
+GBBD47UZM2HN7D7XZIZVG4KVAUC36THN5BES6RMNNOK5TUNXAUCVMAKER,100,XLM,,`;
+    const result = parseCSV(csv);
+    expect(result[0].memo).toBeUndefined();
+  });
+});
+
+describe('Payment File Analysis', () => {
+  test('returns row-level validation feedback for invalid CSV rows', () => {
+    const csv = `address,amount,asset
+${validAddress},100,XLM
+${invalidChecksumAddress},25,XLM
+,30,XLM`;
+
+    const result = parsePaymentFile(csv, 'csv');
+
+    expect(result.rows).toHaveLength(3);
+    expect(result.validPayments).toHaveLength(1);
+    expect(result.invalidCount).toBe(2);
+    expect(result.rows[1].rowNumber).toBe(3);
+    expect(result.rows[1].error).toContain('checksum');
+    expect(result.rows[2].error).toContain('address');
+  });
+});
