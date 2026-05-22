@@ -370,27 +370,6 @@ http://localhost:3000
 
 ---
 
-# 📸 Vista previa
-
-## 🖥️ Funcionalidades principales
-
-<div align="center">
-
-### 💸 Batch Payment Flow
-<img src="https://images.unsplash.com/photo-1556740749-887f6717d7e4?q=80&w=1400&auto=format&fit=crop" width="100%"/>
-
-### ⏳ Smart Contract Vesting
-<img src="https://images.unsplash.com/photo-1639762681485-074b7f938ba0?q=80&w=1400&auto=format&fit=crop" width="100%"/>
-
-### 🌐 Stellar Blockchain Integration
-<img src="https://images.unsplash.com/photo-1621761191319-c6fb62004040?q=80&w=1400&auto=format&fit=crop" width="100%"/>
-
-### 📊 Batch Processing Dashboard
-<img src="https://images.unsplash.com/photo-1551288049-bebda4e38f71?q=80&w=1400&auto=format&fit=crop" width="100%"/>
-
-</div>
-
----
 
 # 🧠 Decisiones arquitectónicas
 
