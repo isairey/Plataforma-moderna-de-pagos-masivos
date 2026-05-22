@@ -239,7 +239,7 @@ Conexión con blockchain Stellar.
 # 📂 Estructura del proyecto
 
 ```bash
-stellar-batchpay/
+Plataforma-moderna-de-pagos-masivos/
 │
 ├── app/
 ├── components/
@@ -323,7 +323,7 @@ CSV/JSON → Validator → Batch Builder → Stellar Transactions → Results
 ## 1️⃣ Clonar repositorio
 
 ```bash
-git clone https://github.com/isairey/stellar-batchpay.git
+git clone https://github.com/isairey/Plataforma-moderna-de-pagos-masivos.git
 ```
 
 ---
@@ -331,7 +331,7 @@ git clone https://github.com/isairey/stellar-batchpay.git
 ## 2️⃣ Entrar al proyecto
 
 ```bash
-cd stellar-batchpay
+cd Plataforma-moderna-de-pagos-masivos
 ```
 
 ---
